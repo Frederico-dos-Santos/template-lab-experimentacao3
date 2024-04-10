@@ -1,3 +1,4 @@
+import json
 import requests
 import os
 import time
@@ -9,20 +10,30 @@ load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
 API_URL = 'https://api.github.com/graphql'
-HEADERS = {'Authorization': 'Bearer %s' % API_KEY}
+HEADERS = {
+    'Authorization': f'Bearer {API_KEY}',
+    'Content-Type': 'application/json'
+}
 
 
-def run_query(query, variables=None):
-    request = requests.post(
-        API_URL, json={"query": query, "variables": variables}, headers=HEADERS)
-    if request.status_code == 200:
-        return request.json()
-    else:
-        raise Exception("Query failed to run by returning code of {}. {}".format(
-            request.status_code, query))
+def run_query(query, variables=None, max_retries=3):
+    retries = 0
+    while retries < max_retries:
+        response = requests.post(
+            API_URL, json={"query": query, "variables": variables}, headers=HEADERS)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            retries += 1
+            if retries == 1:
+                print()
+                
+            print(f"Retentativa {retries} após erro {response.status_code}.")
+            time.sleep(5)
+    raise Exception(f"Query failed after multiple retries: {json.loads(response.text)['errors'][0]['message']}")
 
 
-def get_repo_data(num_repos: int, per_page: int, results: list) -> list:
+def get_repo_data(num_repos: int, per_page: int, results: list=[]) -> list:
     print(f"Buscando {num_repos} repositórios...")
     start_time = time.time()
 
@@ -47,6 +58,8 @@ def get_repo_data(num_repos: int, per_page: int, results: list) -> list:
             if 'errors' in data:
                 raise Exception(
                     f"Erro na consulta GraphQL: { data['errors'][0]['message'] }")
+                
+            cursor = data["data"]["search"]["pageInfo"]["endCursor"]
 
             for edges in data["data"]["search"]["edges"]:
                 repo_info = edges["node"]
@@ -67,8 +80,8 @@ def get_repo_data(num_repos: int, per_page: int, results: list) -> list:
             has_next_page = data["data"]["search"]["pageInfo"]["hasNextPage"]
             if not has_next_page:
                 break
-
-            cursor = data["data"]["search"]["pageInfo"]["endCursor"]
+            
+            time.sleep(1)
 
     except Exception as e:
         print(f"\nErro durante a execução da consulta: {e}")
@@ -77,16 +90,19 @@ def get_repo_data(num_repos: int, per_page: int, results: list) -> list:
     finally:
         end_time = time.time()
         print(f"{len(results) - current_results_len} repositórios encontrados")
-        print(f"Tempo de execução: {end_time - start_time:.2f} segundos")
+        print(f"\nTempo de execução: {end_time - start_time:.2f} segundos")
 
     return results
 
 
-def get_pr_data(repos: list) -> list:
+def get_pr_data(repos: list, results: list=[]) -> list:
     print("Buscando informações dos Pull Requests...")
     start_time = time.time()
 
-    results = list()
+    current_results_len = len(results)
+    if results is None:
+        results = list()
+        
     try:
         for repo in repos:
             existe = any(repo["Repositório"] == result["Repositório"]
@@ -137,17 +153,18 @@ def get_pr_data(repos: list) -> list:
                     "Comentários PR": node["comments"]["totalCount"]
                 }
                 prs.append(info)
-
+            
             results.extend(prs)
+            time.sleep(65)
 
     except Exception as e:
-        print(f"Erro durante a execução da consulta: {e}")
-        print("Salvando itens encontrados até agora em arquivo CSV...")
+        print(f"\nErro durante a execução da consulta: {e}")
+        print("Salvando itens encontrados até agora em arquivo CSV...\n")
         return results
 
     finally:
         end_time = time.time()
-        print(f"{len(results)} Pull Requests encontrados")
+        print(f"{len(results) - current_results_len} Pull Requests encontrados")
         print(f"Tempo de execução: {end_time - start_time:.2f} segundos")
 
     return results
