@@ -1,0 +1,10 @@
+Métrica,Valor
+Média do tamanho dos PRs APROVADOS,845.8305084745763
+Média do tamanho dos PRs REVISÃO NECESSÁRIA,3086.0730593607304
+Tempo médio de análise dos PRs APROVADOS,12 days 04:57:25.644067796
+Tempo médio de análise dos PRs REVISÃO NECESSÁRIA,3 days 09:31:15.255707762
+Correlação entre descrição dos PRs e feedback final das revisões,-0.06285004889083419
+Média de participantes nos PRs APROVADOS,3.128813559322034
+Média de participantes nos PRs REVISÃO NECESSÁRIA,2.041095890410959
+Média de comentários nos PRs APROVADOS,0.9525423728813559
+Média de comentários nos PRs REVISÃO NECESSÁRIA,0.6986301369863014

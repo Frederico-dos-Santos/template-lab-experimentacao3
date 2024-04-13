@@ -1,4 +1,6 @@
 import json
+from pandas import DataFrame
+import pandas as pd
 import requests
 import os
 import time
@@ -141,13 +143,12 @@ def get_pr_data(repos: list, results: list=[]) -> list:
                     "Data de Criação PR": data_criacao_dt,
                     "Data de Fechamento PR": data_fechamento_dt,
                     "Data de Merge PR": data_merge_dt,
-                    "Intervalo Criação e Última Atividadae": round(interval_dates.total_seconds() / 3600, 2),
+                    "Intervalo Criação e Última Atividade": round(interval_dates.total_seconds() / 3600, 2),
                     "Status Revisão": node["reviewDecision"],
                     "Revisões": node["reviews"]["totalCount"],
                     "Arquivos Alterados": node["files"]["totalCount"],
                     "Linhas Adicionadas": node["additions"],
                     "Linhas Excluídas": node["deletions"],
-                    "Corpo PR": corpo_pr,
                     "Caracteres Corpo PR": len(corpo_pr),
                     "Participantes PR": node["participants"]["totalCount"],
                     "Comentários PR": node["comments"]["totalCount"]
@@ -167,4 +168,49 @@ def get_pr_data(repos: list, results: list=[]) -> list:
         print(f"{len(results) - current_results_len} Pull Requests encontrados")
         print(f"Tempo de execução: {end_time - start_time:.2f} segundos")
 
+    return results
+
+
+def summarized_data(df: DataFrame): 
+    results = []
+    repos = df.groupby('Repositório')
+
+    for nome_repo, grupo_repo in repos:
+        lista_repo = grupo_repo.values.tolist()
+        df_repos = DataFrame(lista_repo, columns=grupo_repo.columns)
+        grouped = df_repos.groupby('Estado PR')
+
+        for name, group in grouped:
+            print(f'Grupo: {name}')
+            print(group)
+            print()
+            
+        tamanho_feedback_revisao = df_repos.groupby('Estado PR')['Número PR'].mean()
+        
+        df_repos['Data de Criação PR'] = pd.to_datetime(df_repos['Data de Criação PR'])
+        df_repos['Data de Fechamento PR'] = pd.to_datetime(df_repos['Data de Fechamento PR'])
+        df_repos['Tempo de Análise (horas)'] = (df_repos['Data de Fechamento PR'] - df_repos['Data de Criação PR']).dt.total_seconds() / 3600
+        tempo_analise_feedback_revisao = df_repos.groupby('Estado PR')['Tempo de Análise (horas)'].mean()
+        
+        tamanho_descricao_feedback_revisao = df_repos.groupby('Estado PR')['Caracteres Corpo PR'].mean()
+        interacoes_feedback_revisao = df_repos.groupby('Estado PR')['Participantes PR', 'Comentários PR'].mean()
+        tamanho_numero_revisoes = df_repos.groupby('Revisões')['Tamanho PRs'].mean()
+        tempo_analise_numero_revisoes = df_repos.groupby('Revisões')['Tempo de Análise (horas)'].mean()
+        tamanho_descricao_numero_revisoes = df_repos.groupby('Revisões')['Caracteres Corpo PR'].mean()
+        interacoes_numero_revisoes = df_repos.groupby('Revisões')['Participantes PR', 'Comentários PR'].mean()
+        
+        metrics = {
+            "Repositório": nome_repo,
+            "Tamanho PRs (Feedback/Revisão)": tamanho_feedback_revisao,
+            "Tempo de Análise (horas) (Feedback/Revisão)": tempo_analise_feedback_revisao,
+            "Tamanho Descrição (Feedback/Revisão)": tamanho_descricao_feedback_revisao,
+            "Interacoes (Feedback/Revisão)": interacoes_feedback_revisao,
+            "Tamanho PRs (Número de Revisões)": tamanho_numero_revisoes,
+            "Tempo de Análise (horas) (Número de Revisões)": tempo_analise_numero_revisoes,
+            "Tamanho Descrição (Número de Revisões)": tamanho_descricao_numero_revisoes,
+            "Interacoes (Número de Revisões)": interacoes_numero_revisoes
+        }
+        
+        results.append(metrics)
+    
     return results
