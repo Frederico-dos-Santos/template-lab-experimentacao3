@@ -1,37 +1,44 @@
 import os
+from typing import Union
 import pandas as pd
 
 ROOT_PATH = os.getcwd().replace('\\', '/')
 SAVE_PATH = ROOT_PATH + '/scripts/dataset/'
 
 
-def save_to_csv(results: list, filename: str):
+def save_to_csv(results: Union[list, pd.DataFrame], filename: str):
     try:
-        if len(results) == 0:
-            return
+        if isinstance(results, list):
+            if len(results) == 0:
+                return
+            df = pd.DataFrame(results)
+        elif isinstance(results, pd.DataFrame):
+            df = results
+        else:
+            raise TypeError("O argumento 'results' deve ser uma lista ou DataFrame do pandas.")
 
-        df = pd.DataFrame(results)
         df.to_csv(SAVE_PATH + filename, index=False)
+        print(f"Resultados salvos em '{filename}'")
 
-    except FileNotFoundError:
-        print(f"Erro: Arquivo '{filename}' não encontrado")
+    except Exception as e:
+        print(f"Erro ao salvar em CSV: {e}")
 
 
-def read_csv(filename: str, columns: list = None):
+def read_csv(filename: str, type='list', columns: list = None):
     try:
         df = pd.read_csv(SAVE_PATH + filename)
         print(df.head())
         print()
 
-        df = df[columns] if columns else df
-        results = df.to_dict('records')
-        if len(results) > 0:
-            return results
-
+        if type == 'list':
+            df = df[columns] if columns else df
+            results = df.to_dict('records')
+            if len(results) > 0:
+                return results
+        
+        return df
     except FileNotFoundError:
         print(f"Erro: Arquivo '{filename}' não encontrado")
-
-    return None
 
 
 def merge_data(repo_df: list, pr_df: list, column_join: str):
