@@ -9,7 +9,6 @@ query search($perPage: Int!, $cursor: String) {
             totalCount
           }
           pullRequests(
-            first: 100
             states: [MERGED, CLOSED]
             orderBy: { field: CREATED_AT, direction: DESC }
           ) {
@@ -31,8 +30,8 @@ query repository($owner: String!, $name: String!) {
   repository(owner: $owner, name: $name) {
     pullRequests(
       states: [MERGED, CLOSED]
-      first: 100
       orderBy: {field: CREATED_AT, direction: DESC}
+      first: 100
     ) {
       edges {
         node {
@@ -44,7 +43,7 @@ query repository($owner: String!, $name: String!) {
           mergedAt
           bodyText
           reviewDecision
-          reviews(first: 1) {
+          reviews {
             totalCount
           }
           files {
@@ -59,6 +58,10 @@ query repository($owner: String!, $name: String!) {
             totalCount
           }
         }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
       }
     }
   }

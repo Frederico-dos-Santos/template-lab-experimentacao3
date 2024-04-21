@@ -24,7 +24,7 @@ def save_to_csv(results: Union[list, pd.DataFrame], filename: str):
         print(f"Erro ao salvar em CSV: {e}")
 
 
-def read_csv(filename: str, type='list', columns: list = None):
+def read_csv(filename: str, type='list' or 'dataframe', columns: list = None):
     try:
         df = pd.read_csv(SAVE_PATH + filename)
         print(df.head())
@@ -36,17 +36,17 @@ def read_csv(filename: str, type='list', columns: list = None):
             if len(results) > 0:
                 return results
         
-        return df
+        elif type == 'dataframe':
+            return df
     except FileNotFoundError:
         print(f"Erro: Arquivo '{filename}' não encontrado")
-
 
 def merge_data(repo_df: list, pr_df: list, column_join: str):
     try:
         repo_df = pd.DataFrame(repo_df)
         pr_df = pd.DataFrame(pr_df)
 
-        combined_data = pd.merge(repo_df, pr_df, on=column_join, how='inner')
+        combined_data = pd.merge(repo_df, pr_df, on=column_join, how='inner').fillna(0)
         return combined_data
     except Exception as e:
         print(f"Erro: Não foi possível fazer o merge {e}")
