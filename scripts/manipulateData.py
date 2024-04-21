@@ -177,17 +177,19 @@ def get_pr_data(repo_results: list=[], pr_results: list=[]) -> list:
 
 def summarized_data(df: DataFrame, columns: list):
     import pandas as pd
-
+    
     median_per_repo = df.groupby('Repositório')[columns].median(numeric_only=True).round(2).fillna(0)
-    total_data_per_repo = df.groupby('Repositório')[["Revisões", "Comentários PR", "Participantes PR"]].sum().fillna(0)
-    media_data_per_repo = df.groupby('Repositório')[["Arquivos Alterados", "Linhas Adicionadas", "Linhas Excluídas"]].mean().fillna(0)
+    total_data_per_repo = df.groupby('Repositório')[["Revisões", "Comentários PR", "Participantes PR", "Arquivos Alterados", "Linhas Adicionadas", "Linhas Excluídas"]].sum().fillna(0)
     status_counts = df.groupby(['Repositório', 'Status Revisão']).size().unstack(fill_value=0)
-    resultados = pd.concat(
-        [median_per_repo, total_data_per_repo, media_data_per_repo, status_counts], axis=1)
 
+    resultados = pd.concat([median_per_repo, total_data_per_repo, status_counts], axis=1)
     resultados.reset_index(inplace=True)
 
+    colunas_ordenadas = ['Repositório'] + columns + ["Revisões", "Comentários PR", "Participantes PR", "Arquivos Alterados", "Linhas Adicionadas", "Linhas Excluídas"] + ['APPROVED', 'CHANGES_REQUESTED', 'REVIEW_REQUIRED']
+    resultados = resultados[colunas_ordenadas]
+
     return resultados
+
 
 
 def get_correlation_coefficient(df: DataFrame, columns: list):

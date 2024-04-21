@@ -1,7 +1,7 @@
 import pandas as pd
 from manipulateData import get_repo_data, get_pr_data, summarized_data, get_correlation_coefficient
 from saveData import save_to_csv, read_csv, merge_data
-from createGraphs import dispertion, violin
+from createGraphs import dispertion, bar
 
 NUM_REPOSTORIES = 250
 PER_PAGE = 1
@@ -52,35 +52,17 @@ def main():
     print(f"P_value: {pv_review_req}")
         
     df_approved = data_results[data_results["Status Revisão"] == "APPROVED"]
-    data_analysis_approved = df_approved.groupby("Repositório")[["Arquivos Alterados", "Linhas Adicionadas", "Linhas Excluídas"]].mean().fillna(0)
     
     df_changes_req = data_results[data_results["Status Revisão"] == "CHANGES_REQUESTED"]
-    data_analysis_changes_req = df_changes_req.groupby("Repositório")[["Arquivos Alterados", "Linhas Adicionadas", "Linhas Excluídas"]].mean().fillna(0)
     
     df_review_req = data_results[data_results["Status Revisão"] == "REVIEW_REQUIRED"]
-    data_analysis_review_req = df_review_req.groupby("Repositório")[["Arquivos Alterados", "Linhas Adicionadas", "Linhas Excluídas"]].mean().fillna(0)
-    
-    novo_df = data_analysis_approved[data_analysis_approved['Arquivos Alterados'] <= 50]
-    violin(
-        novo_df,
-        column="Arquivos Alterados",
-        title="Correlação de Arquivos Alterados (Média) e Revisões Aprovadas"
-    )
-    
-    
-    novo_df = data_analysis_changes_req[data_analysis_changes_req['Arquivos Alterados'] <= 50]
-    violin(
-        novo_df,
-        column="Arquivos Alterados",
-        title="Correlação de Arquivos Alterados (Média) e Revisões Mudanças Pendentes"
-    )
-    
-    
-    novo_df = data_analysis_review_req[data_analysis_review_req['Arquivos Alterados'] <= 150]
-    violin(
-        novo_df,
-        column="Arquivos Alterados",
-        title="Correlação de Arquivos Alterados (Média) e Revisões Necessárias"
+        
+    bar(
+        colors=["#ad150a", "#d11f0f", "#f62a14"],
+        bars=["APPROVED", "CHANGES_REQUESTED", "REVIEW_REQUIRED"],
+        values=[df_approved["Arquivos Alterados"].sum(), df_changes_req["Arquivos Alterados"].sum(), df_review_req["Arquivos Alterados"].sum()],
+        value_label="Arquivos Alterados",
+        title="Correlação de Arquivos Alterados e feedback final das revisões"
     )
     
     cc_approved, pv_approved = get_correlation_coefficient(
@@ -102,25 +84,12 @@ def main():
     print(f"\nCoeficiente de Correlação: {cc_review_req}")
     print(f"P_value: {pv_review_req}")
     
-    novo_df = data_analysis_approved[data_analysis_approved['Linhas Adicionadas'] <= 2000]
-    violin(
-        novo_df,
-        column="Linhas Adicionadas",
-        title="Correlação de Linhas Adicionadas (Média) e Revisões Aprovadas"
-    )
-    
-    novo_df = data_analysis_changes_req[data_analysis_changes_req['Linhas Adicionadas'] <= 1500]
-    violin(
-        novo_df,
-        column="Linhas Adicionadas",
-        title="Correlação de Linhas Adicionadas (Média) e Revisões Mudanças Pendentes"
-    )
-    
-    novo_df = data_analysis_review_req[data_analysis_review_req['Linhas Adicionadas'] <= 1500]
-    violin(
-        novo_df,
-        column="Linhas Adicionadas",
-        title="Correlação de Linhas Adicionadas (Média) e Revisões Necessárias"
+    bar(
+        colors=["#429334", "#58a948", "#6fbf5d"],
+        bars=["APPROVED", "CHANGES_REQUESTED", "REVIEW_REQUIRED"],
+        values=[df_approved["Linhas Adicionadas"].sum(), df_changes_req["Linhas Adicionadas"].sum(), df_review_req["Linhas Adicionadas"].sum()],
+        value_label="Linhas Adicionadas",
+        title="Correlação de Linhas Adicionadas e feedback final das revisões"
     )
     
     cc_approved, pv_approved = get_correlation_coefficient(
@@ -142,25 +111,12 @@ def main():
     print(f"\nCoeficiente de Correlação: {cc_review_req}")
     print(f"P_value: {pv_review_req}")
     
-    novo_df = data_analysis_approved[data_analysis_approved['Linhas Excluídas'] <= 700]
-    violin(
-        novo_df,
-        column="Linhas Excluídas",
-        title="Correlação de Linhas Excluídas (Média) e Revisões Aprovadas"
-    )
-    
-    novo_df = data_analysis_changes_req[data_analysis_changes_req['Linhas Excluídas'] <= 500]
-    violin(
-        novo_df,
-        column="Linhas Excluídas",
-        title="Correlação de Linhas Excluídas (Média) e Revisões Mudanças Pendentes"
-    )
-    
-    novo_df = data_analysis_review_req[data_analysis_review_req['Linhas Excluídas'] <= 1500]
-    violin(
-        novo_df,
-        column="Linhas Excluídas",
-        title="Correlação de Linhas Excluídas (Média) e Revisões Necessárias"
+    bar(
+        colors=["#5230f4", "#7a4ff8", "#a26dfb"],
+        bars=["APPROVED", "CHANGES_REQUESTED", "REVIEW_REQUIRED"],
+        values=[df_approved["Linhas Excluídas"].sum(), df_changes_req["Linhas Excluídas"].sum(), df_review_req["Linhas Excluídas"].sum()],
+        value_label="Linhas Excluídas",
+        title="Correlação de Linhas Excluídas e feedback final das revisões"
     )
     
     # RQ 02 - Qual a relação entre o tempo de análise dos PRs e o feedback final das revisões?
@@ -184,28 +140,12 @@ def main():
     print(f"\nCoeficiente de Correlação: {cc_review_req}")
     print(f"P_value: {pv_review_req}")
     
-    dispertion(
-        data_summarized,
-        columns={"x": "Intervalo Criação e Última Atividade", "y": "APPROVED"},
-        color="red", 
-        labels={"x": "Intervalo Médio de Análise (em horas)", "y": "Quantidade de PRs Aprovados"},
-        title="Correlação de Tempo de Análise e Revisões Aprovadas"
-    )
-    
-    dispertion(
-        data_summarized,
-        color="green", 
-        columns={"x": "Intervalo Criação e Última Atividade", "y": "CHANGES_REQUESTED"},
-        labels={"x": "Intervalo Médio de Análise (em horas)", "y": "Quantidade de PRs com Mudanças Pendentes"},
-        title="Correlação de Tempo de Análise e Revisões com Mudanças Pendentes"
-    )
-    
-    dispertion(
-        data_summarized,
-        color="gray", 
-        columns={"x": "Intervalo Criação e Última Atividade", "y": "REVIEW_REQUIRED"},
-        labels={"x": "Intervalo Médio de Análise (em horas)", "y": "Quantidade de PRs com Revisão Necessária"},
-        title="Correlação de Tempo de Análise e Revisões Necessárias"
+    bar(
+        colors=["#ffc219", "#f07c19", "#e32551"], 
+        bars=["APPROVED", "CHANGES_REQUESTED", "REVIEW_REQUIRED"],
+        values=[df_approved["Intervalo Criação e Última Atividade"].sum(), df_changes_req["Intervalo Criação e Última Atividade"].sum(), df_review_req["Intervalo Criação e Última Atividade"].sum()],
+        value_label="Intervalo Criação e Última Atividade",
+        title="Correlação de Tempo de Análise e feedback final das revisões"
     )
     
     # RQ 03 - Qual a relação entre a descrição dos PRs e o feedback final das revisões?
@@ -228,37 +168,13 @@ def main():
     print("\n\nCaracteres do Corpo do PR x REVIEW_REQUIRED")
     print(f"\nCoeficiente de Correlação: {cc_review_req}")
     print(f"P_value: {pv_review_req}")
-    
-    # Remover outilers (Caracteres Corpo PR < 1000)
-    novo_df = data_summarized.loc[data_summarized['Caracteres Corpo PR'] <= 1000]
-    dispertion(
-        novo_df,
-        color="purple", 
-        columns={"x": "Caracteres Corpo PR", "y": "APPROVED"},
-        labels={"x": "Quantidade de caracteres do Corpo do PR", "y": "Quantidade de PRs Aprovados"},
-        title="Correlação de Descrição e Revisões Aprovadas"
-    )
-    
-    # Remover outliers (Caracteres Corpo PR < 1000; feedback < 12)
-    novo_df = data_summarized.loc[data_summarized['Caracteres Corpo PR'] <= 1000]
-    novo_df = data_summarized.loc[data_summarized['CHANGES_REQUESTED'] <= 12]
-    dispertion(
-        novo_df,
-        color="orange", 
-        columns={"x": "Caracteres Corpo PR", "y": "CHANGES_REQUESTED"},
-        labels={"x": "Quantidade de caracteres do Corpo do PR", "y": "Quantidade de PRs com Mudanças Pendentes"},
-        title="Correlação de Descrição e Revisões com Mudanças Pendentes"
-    )
-    
-    # Remover outliers (Caracteres Corpo PR < 1000; feedback < 40)
-    novo_df = data_summarized.loc[data_summarized['Caracteres Corpo PR'] <= 1000]
-    novo_df = data_summarized.loc[data_summarized['REVIEW_REQUIRED'] <= 40]
-    dispertion(
-        novo_df,
-        color="blue", 
-        columns={"x": "Caracteres Corpo PR", "y": "REVIEW_REQUIRED"},
-        labels={"x": "Quantidade de caracteres do Corpo do PR", "y": "Quantidade de PRs com Revisão Necessária"},
-        title="Correlação de Descrição e Revisões Necessárias"
+        
+    bar(
+        colors=["#5015bd", "#027fe9", "#00caf8"], 
+        bars=["APPROVED", "CHANGES_REQUESTED", "REVIEW_REQUIRED"],
+        values=[df_approved["Caracteres Corpo PR"].sum(), df_changes_req["Caracteres Corpo PR"].sum(), df_review_req["Intervalo Criação e Última Atividade"].sum()],
+        value_label="Caracteres Corpo PR",
+        title="Correlação de Descrição e feedback final das revisões"
     )
     
     # RQ 04 - Qual a relação entre as interações nos PRs e o feedback final das revisões?
@@ -282,26 +198,12 @@ def main():
     print(f"\nCoeficiente de Correlação: {cc_review_req}")
     print(f"P_value: {pv_review_req}")
     
-    # Usar violin
-    data_analysis_approved = df_approved.groupby("Repositório")[["Comentários PR", "Participantes PR"]].sum().fillna(0)
-    violin(
-        data_analysis_approved,
-        column="Participantes PR",
-        title="Correlação de Participantes do PR e Revisões Aprovadas"
-    )
-    
-    data_analysis_changes_req = df_changes_req.groupby("Repositório")[["Comentários PR", "Participantes PR"]].sum().fillna(0)
-    violin(
-        data_analysis_changes_req,
-        column="Participantes PR",
-        title="Correlação de Participantes do PR e Revisões com Mudanças Pendentes"
-    )
-    
-    data_analysis_review_req = df_review_req.groupby("Repositório")[["Comentários PR", "Participantes PR"]].sum().fillna(0)
-    violin(
-        data_analysis_review_req,
-        column="Participantes PR",
-        title="Correlação de Participantes do PR e Revisões Necessárias"
+    bar(
+        colors=["#a90448", "#fb3640", "#fda543"], 
+        bars=["APPROVED", "CHANGES_REQUESTED", "REVIEW_REQUIRED"],
+        values=[df_approved["Participantes PR"].sum(), df_changes_req["Participantes PR"].sum(), df_review_req["Participantes PR"].sum()],
+        value_label="Participantes PR",
+        title="Correlação de Participantes do PR e feedback final das revisões"
     )
     
     cc_approved, pv_approved = get_correlation_coefficient(
@@ -322,24 +224,13 @@ def main():
     print("\n\Comentários do PR x REVIEW_REQUIRED")
     print(f"\nCoeficiente de Correlação: {cc_review_req}")
     print(f"P_value: {pv_review_req}")
-
-    violin(
-        data_analysis_approved,
-        column="Comentários PR",
-        title="Correlação de Comentários do PR e Revisões Aprovadas"
-    )
     
-    violin(
-        data_analysis_changes_req,
-        column="Comentários PR",
-        title="Correlação de Comentários do PR e Revisões com Mudanças Pendentes"
-    )
-
-    novo_df = data_analysis_review_req[data_analysis_review_req['Comentários PR'] <= 200]
-    violin(
-        novo_df,
-        column="Comentários PR",
-        title="Correlação de Comentários do PR e Revisões Necessárias"
+    bar(
+        colors=["#07f9a2", "#0a8967", "#0d192b"], 
+        bars=["APPROVED", "CHANGES_REQUESTED", "REVIEW_REQUIRED"],
+        values=[df_approved["Comentários PR"].sum(), df_changes_req["Comentários PR"].sum(), df_review_req["Comentários PR"].sum()],
+        value_label="Comentários PR",
+        title="Correlação de Comentários do PR e feedback final das revisões"
     )
 
     # RQ 05 - Qual a relação entre o tamanho dos PRs e o número de revisões realizadas?
@@ -365,8 +256,6 @@ def main():
     print(f"P_value: {pv_del_lines}")
     
     novo_df = data_summarized.loc[data_summarized['Arquivos Alterados'] <= 5000]
-    novo_df = data_summarized.loc[data_summarized['Linhas Adicionadas'] <= 10000]
-    novo_df = data_summarized.loc[data_summarized['Linhas Excluídas'] <= 4000]
     dispertion(
         novo_df,
         color="green", 
@@ -375,6 +264,7 @@ def main():
         title="Correlação de Arquivos Alterados e Total de Revisões"
     )
     
+    novo_df = data_summarized.loc[data_summarized['Linhas Adicionadas'] <= 10000]
     dispertion(
         novo_df,
         color="blue", 
@@ -383,6 +273,7 @@ def main():
         title="Correlação de Linhas Adicionadas e Total de Revisões"
     )
     
+    novo_df = data_summarized.loc[data_summarized['Linhas Excluídas'] <= 4000]
     dispertion(
         novo_df,
         color="red", 

@@ -9,11 +9,11 @@ def dispertion(df: DataFrame, columns: object, labels: object, title: str, color
     plt.title(title)
     plt.show()
 
-def violin(df: DataFrame, column: str, title: str):
+def bar(bars: list, values: list, value_label: str, title: str, colors: list=['blue', 'green', 'orange', 'red', 'purple']):
     plt.figure(figsize=(10, 6))
-    plt.violinplot(df[column].fillna(0))
-    plt.xlabel(column)
+    plt.bar(bars, values, color=colors)
+    plt.ylabel(value_label)
     plt.title(title)
+    plt.grid(axis='y')
     plt.show()
-
     
