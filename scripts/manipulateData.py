@@ -1,5 +1,4 @@
 from pandas import DataFrame
-import pandas as pd
 import requests
 import os
 import time
@@ -112,7 +111,7 @@ def get_pr_data(repo_results: list=[], pr_results: list=[]) -> list:
             data, status_code = run_query(query=pr_query, variables=pr_variables)
             
             if not data:
-                print(f"Pulando repositório {repo["Repositório"]}...")
+                print(f"Pulando repositório {repo['Repositório']}...")
                 req_errors += 1
                 
                 continue
@@ -175,17 +174,17 @@ def get_pr_data(repo_results: list=[], pr_results: list=[]) -> list:
         
         return pr_results
 
-def summarized_data(df: DataFrame, columns: list):
+def summarized_data(df: DataFrame, mean_columns: list, total_columns: list):
     import pandas as pd
     
-    median_per_repo = df.groupby('Repositório')[columns].median(numeric_only=True).round(2).fillna(0)
-    total_data_per_repo = df.groupby('Repositório')[["Revisões", "Comentários PR", "Participantes PR", "Arquivos Alterados", "Linhas Adicionadas", "Linhas Excluídas"]].sum().fillna(0)
+    median_per_repo = df.groupby('Repositório')[mean_columns].mean(numeric_only=True).round(2).fillna(0)
+    total_data_per_repo = df.groupby('Repositório')[total_columns].sum().fillna(0)
     status_counts = df.groupby(['Repositório', 'Status Revisão']).size().unstack(fill_value=0)
 
     resultados = pd.concat([median_per_repo, total_data_per_repo, status_counts], axis=1)
     resultados.reset_index(inplace=True)
 
-    colunas_ordenadas = ['Repositório'] + columns + ["Revisões", "Comentários PR", "Participantes PR", "Arquivos Alterados", "Linhas Adicionadas", "Linhas Excluídas"] + ['APPROVED', 'CHANGES_REQUESTED', 'REVIEW_REQUIRED']
+    colunas_ordenadas = ['Repositório'] + mean_columns + total_columns + ['APPROVED', 'CHANGES_REQUESTED', 'REVIEW_REQUIRED']
     resultados = resultados[colunas_ordenadas]
 
     return resultados
