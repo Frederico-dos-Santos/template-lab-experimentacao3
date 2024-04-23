@@ -6,13 +6,38 @@ Relatório final para o laboratório de caracterização da atividade de code re
 
 A prática de code review tornou-se uma constante nos processos de desenvolvimento agéis. Em linhas gerais, ela consiste na interação entre desenvolvedores e revisores visando inspecionar o código produzido antes de integrá-lo à base principal. Assim, garante-se a qualidade do código integrado, evitando-se também a inclusão de defeitos. No contexto de sistemas open source, mais especificamente dos desenvolvidos através do GitHub, as atividades de code review acontecem a partir da avaliação de contribuições submetidas por meio de Pull Requests (PR). Ou seja, para que se integre um código na branch principal, é necessário que seja realizada uma solicitação de pull, que será avaliada e discutida por um colaborador do projeto. Ao final, a solicitação de merge pode ser aprovada ou rejeitada pelo revisor. Em muitos casos, ferramentas de verificação estática realizam uma primeira análise, avaliando requisitos de estilo de programação ou padrões definidos pela organização.
 
-Neste contexto, o objetivo deste laboratório é analisar a atividade de code review desenvolvida em repositórios populares do GitHub, identificando variáveis que influenciam no merge de um PR, sob a perspectiva de desenvolvedores que submetem código aos repositórios selecionados. 
+Neste contexto, o objetivo deste laboratório é analisar a atividade de code review desenvolvida em repositórios populares do GitHub, identificando variáveis que influenciam no merge de um PR, sob a perspectiva de desenvolvedores que submetem código aos repositórios selecionados.
 
-## Questões de Pesquisa e Hipóteses Informais
+Para alcançar este objetivo, foram levantadas oito Questões de Pesquisa que relacionam duas dimenções: as métricas de Tamanho, Tempo e Análise de cada PR, a Descrição e as Iterações, e o feedback final das revisões e a quantidade delas.
 
-Com base no dataset coletado, responderemos às seguintes questões de pesquisa, definidos de acordo com duas dimensões:
+##### A. Feedback Final das Revisões (Status do PR):
 
-**A. Feedback Final das Revisões (Status do PR):**
+* RQ 01. Qual a relação entre o **tamanho** dos PRs e o feedback final das revisões?
+* RQ 02. Qual a relação entre o **tempo de análise** dos PRs e o feedback final das revisões?
+* RQ 03. Qual a relação entre a **descrição** dos PRs e o feedback final das revisões?
+* RQ 04. Qual a relação entre as **interações** nos PRs e o feedback final das revisões?
+
+##### B. Número de Revisões:
+
+* RQ 05. Qual a relação entre o **tamanho** dos PRs e o número de revisões realizadas?
+* RQ 06. Qual a relação entre o **tempo de análise** dos PRs e o número de revisões realizadas?
+* RQ 07. Qual a relação entre a **descrição** dos PRs e o número de revisões realizadas?
+* RQ 08. Qual a relação entre as **interações** nos PRs e o número de revisões realizadas?
+ 
+#### 3. Definição de Métricas
+As métricas utilizadas nas questões de pesquisa estão definidas a seguir:
+
+* **Tamanho**: número de arquivos; total de linhas adicionadas e removidas.
+* **Tempo de Análise**: intervalo entre a criação do PR e a última atividade (fechamento ou merge).
+* **Descrição**: número de caracteres do corpo de descrição do PR (na versão markdown).
+* **Interações**: número de participantes; número de comentários.
+* **Feedback Final das Revisões**: a decisão da revisão.
+
+## Hipóteses Informais
+
+Nesta seção, serão levantadas as hipóteses informais relacionadas às Questões de Pesquisa:
+
+#### **A. Feedback Final das Revisões (Status do PR):**
 
 - **RQ 01.** Qual a relação entre o tamanho dos PRs e o feedback final das revisões?
 
@@ -32,7 +57,7 @@ Hipótese: Maior interação nos PRs, incluindo discussões construtivas e respo
 
 ---
 
-**B. Número de Revisões:**
+#### **B. Número de Revisões:**
 
 - **RQ 05.** Qual a relação entre o tamanho dos PRs e o número de revisões realizadas?
 
@@ -50,43 +75,163 @@ Hipótese: Descrições mais detalhadas e informativas nos PRs podem reduzir a n
 
 Hipótese: Uma maior interação nos PRs, com discussões ativas e resolução rápida de problemas levantados, pode levar a um número menor de revisões, indicando uma comunicação eficaz entre os colaboradores.
 
-## Resultados
+## Metodologia
+
+#### 1. Criação do Dataset
+O dataset utilizado será composto por PRs submetidos a repositórios:
+
+* populares (ou seja, avaliaremos PRs submetidos aos 200 repositórios mais populares do GitHub);
+* que possuam pelos menos 100 PRs (MERGED + CLOSED).
+
+Além disso, a fim de analisar PRs que tenham passado pelo processo de code review, selecionaremos apenas aqueles:
+
+* com status MERGED ou CLOSED;
+* que possuam pelo menos uma revisão (total count do campo review).
+
+#### 2. Coleta dos dados
+Para criar o dataset, será desenvolvido um código em Python que fará a extração dos dados necessários usando a API do GitHub através do GraphQL. Esse código será projetado para coletar informações como tamanho dos PRs, tempo de análise, descrições, interações nos PRs e status do merge, garantindo assim a obtenção de dados completos e relevantes para a análise.
+
+#### 3. Processamento dos Dados
+Nesta etapa, ocorrerá a Limpeza e Tratamento dos dados coletados. Isso incluirá a remoção de informações inconsistentes ou irrelevantes para a análise, como PRs que foram revisados automaticamente por bots ou ferramentas de CI/CD. Será feita uma seleção específica de PRs, considerando apenas aqueles cuja revisão demandou pelo menos uma hora, identificada pela diferença entre a data de criação e a data de merge (ou close) superior a uma hora. Além disso, os dados brutos serão transformados e organizados em formato CSV para facilitar a manipulação e a permanência das informações.
+
+#### 4. Análise dos Dados
+Na  Análise, serão utilizados gráficos como bar charts e scatter plots, gerados a partir do código em Python, para uma visualização mais clara dos dados. Esses gráficos ajudarão a identificar padrões, tendências e relações entre as variáveis estudadas.
+
+#### 5. Discussão das Hipóteses
+Com base nas análises realizadas, será feita a Discussão das Hipóteses levantadas inicialmente. Essa discussão visa validar ou refutar as suposições da pesquisa, comparando os Resultados Obtidos com as Hipóteses formuladas, a fim de avaliar se os dados suportam as hipóteses propostas ou se há necessidade de revisão. 
+
+## Resultados Obtidos
+
+A seção de Resultados Obtidos do presente trabalho apresenta uma análise das relações entre métricas de qualidade de código (CBO, DIT, LCOM) e a popularidade, maturidade, atividade e tamanho dos repositórios Java, medido pelo número de estrelas, ano de criação do repositório, número de releases lançadas e o número de linhas de código (LOC), respectivamente.
+
+Para a análise do coeficiente de correlação, será considerados estes valores:
+
+<div align="center" style="display:flex;">
+
+| Intervalo de _p-value_ | Classificação        |
+| :--------------------- | :------------------- |
+| _p-value_ < 0,001      | Existe correlação    |
+| _p-value_ >= 0,001     | Não existe correlação |
+
+</div>
+ 
+<div align="center" style="display:flex;">
+
+| Intervalo de ρ  | Classificação  |
+| :-------------- | :------------- |
+| 0,0 <= ρ < 0,1  | Sem correlação |
+| 0,1 <= ρ < 0,3  | Insignificante |
+| 0,3 <= ρ < 0,5  | Baixo          |
+| 0,5 <= ρ < 0,7  | Moderado       |
+| 0,7 <= ρ < 0,9  | Alto           |
+| 0,9 <= ρ < 1,00 | Muito alto     |
+
+</div>
 
 - **RQ 01.** Qual a relação entre o tamanho dos PRs e o feedback final das revisões?
 
+| | | | 
+| --- | --- | --- |
 | | | |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![Tamanho_Feedback_Arquivos](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/aa43470a-84b2-459c-9877-137f7c6cacb6) | ![Media_Tamanho_Feedback_Arquivos](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/9e6089d6-69d6-49c0-a05a-f9f56c806d09) | ![Mediana_Tamanho_Feedback_Arquivos](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/c55270b1-4110-4f4f-9614-51e4271d181e) |
 
+| | | | 
+| --- | --- | --- |
 | | | |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![Tamanho_Feedback_LinhasAdicioandas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/077619cd-95ba-4ce4-a3e1-7822a9d18043) | ![Media_Tamanho_Feedback_LinhasAdicioandas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/12c65aef-0d1b-44f1-92be-b13502b35b00) | ![Mediana_Tamanho_Feedback_LinhasAdicioandas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/b6dee58f-fb92-4d14-8b57-d13f9980f9f9) |
 
-| | | |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![Tamanho_Feedback_LinhasExcluidas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/8da82b19-db42-4186-8e35-a978e2a00475) | ![Media_Tamanho_Feedback_LinhasExcluidas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/a2a586cb-9d0a-430c-a393-51d1a13dabed) | ![Mediana_Tamanho_Feedback_LinhasExcluidas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/2106d1fa-6a25-4d22-9558-db601a37b779) |
+**<h4 align="center">Coeficiente de Spearman</h4>**
+
+<div align="center" style="display:flex;">
+    <div>
+        |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+        | :------ | :---- | :--------------------- | :---- |
+        | ρ | 0.33  | 0.12  | 0.23  |
+        | p-value | 1.61 × 10<sup>-6</sup> | 0.08 | 0.0012 |
+    </div>
+    <div>
+        |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+        | :------ | :---- | :--------------------- | :---- |
+        | ρ | 0.20  | 0.13 | 0.18  |
+        | p-value | 0.0039 | 0.077 | 0.012 |
+    </div>
+    <div>
+        |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+        | :------ | :---- | :--------------------- | :---- |
+        | ρ | 0.19  | 0.09  | 0.09  |
+        | p-value | 0.006 | 0.185 | 0.186 |
+    </div>
+</div>
+
+A análise da relação entre o tamanho dos Pull Requests (PRs) e o feedback final das revisões revela uma tendência interessante: PRs menores têm maior probabilidade de aprovação ou necessidade de revisão. Isso se evidencia pela mediana menor e pelos quartis nos gráficos de Linhas Excluídas e Arquivos Alterados nos boxplots dos PRs aprovados. Além disso, a correlação positiva fraca entre o tamanho do PR e os diferentes tipos de feedback sugere que PRs maiores enfrentam revisões mais exigentes, sendo notável uma maior chance de aprovação para pull requests de refatoração que reduzem o número de linhas. A influência do tamanho do PR no resultado das revisões é clara, especialmente nos PRs aprovados, demonstrada pelos valores significativos de p-value na análise de Spearman. Entretanto, é crucial ressaltar que outros fatores também têm impacto, o que ressalta a complexidade do processo de revisão de código.
+
+Além disso, em relação às linhas adicionadas, percebe-se uma tendência maior de requerer revisões para aprovação. Isso reafirma a maior exigência de verificação de novas funcionalidades no sistema.
 
 - **RQ 02.** Qual a relação entre o tempo de análise dos PRs e o feedback final das revisões?
 
-| | | |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![Tempo_Analise_X_Feedback](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/843617d8-3b4e-4154-bb03-e0d159be1fd6) | ![Media_Tempo_Analise_X_Feedback](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/fa625779-3802-43e7-aa5e-5a53beffa096) | ![Mediana_Tempo_Analise_X_Feedback](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/00ea44c3-b655-41c1-adb9-46fa5fa87c90) |
+| | |
+| --- | --- |
+| | |
+
+**<h4 align="center">Coeficiente de Spearman</h4>**
+
+<div align="center" style="display:flex;">
+    
+    |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+    | :------ | :---- | :--------------------- | :---- |
+    | ρ | -0.49  | -0.08  | -0.24  |
+    | p-value | 2.074 × 10<sup>-13</sup> | 0.28 | 0.0007 |
+
+</div>
+
+Os gráficos revelam que PRs que recebem solicitações de alterações (CHANGES_REQUESTED) geralmente demandam mais tempo em comparação com PRs aprovados ou aqueles que requerem revisão (REVIEW_REQUIRED). Isso pode estar relacionado ao processo de revisão, especialmente para PRs com um grande número de linhas adicionadas. Eles passam por múltiplos estágios, como revisão inicial (REVIEW_REQUESTED) e, caso haja inconsistências ou erros, são solicitadas alterações (CHANGES_REQUESTED), seguidas por uma nova revisão e assim por diante, conforme visto no gráfico de "Correlação entre Linhas Adicionadas e Feedback final das Revisões". Esse ciclo de revisões múltiplas pode consumir mais tempo devido à necessidade de envolvimento de várias partes no processo de revisão.
 
 - **RQ 03.** Qual a relação entre a descrição dos PRs e o feedback final das revisões?
 
-| | | |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![Descricao_Feedback](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/645b0386-ef6d-4265-8af6-7cad74d91811) | ![Media_Descricao_Feedback](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/a08ae430-3dda-4e29-9643-b36e946d59c4) | ![Mediana_Descricao_Feedback](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/75241304-bf9f-4dcb-b108-0527fcddc704) |
+| | |
+| --- | --- |
+| | |
+
+**<h4 align="center">Coeficiente de Spearman</h4>**
+
+<div align="center" style="display:flex;">
+    
+|         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+| :------ | :---- | :--------------------- | :---- |
+| ρ | 0.36  | 0.15  | 0.2  |
+| p-value | 1.55 × 10<sup>-7</sup> | 0.033 | 0.004 |
+
+</div>
+
+A análise revela que PRs com descrições mais extensas têm uma ligeira vantagem na probabilidade de aprovação e podem reduzir a necessidade de revisões adicionais. Isso é apoiado pela mediana e quartis superiores dos PRs aprovados em comparação com os PRs que requerem mudanças ou revisões adicionais. A correlação de Spearman confirma essa tendência, mostrando uma correlação positiva fraca entre o tamanho da descrição e o feedback final das revisões para todos os tipos de PRs.
 
 - **RQ 04.** Qual a relação entre as interações nos PRs e o feedback final das revisões?
 
-| | | |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![Interacoes_Feedback_Participantes](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/7ad3c173-4933-4991-ba85-554736959c50) | ![Media_Interacoes_Feedback_Participantes](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/4262846a-a770-458c-98a1-a8e657110434) | ![Mediana_Interacoes_Feedback_Participantes](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/3495ab96-9fb2-49c5-8ea7-3b8090e2918c) |
+| | |
+| --- | --- |
+| | |
 
-| | | |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![Interacoes_Feedback_Comentarios](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/6c4bfd9b-cc95-4756-b7e8-43d259d3e25e) | ![Media_Interacoes_Feedback_Comentarios](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/581e8584-bee6-4cee-8781-3c5ba9dfefb6) | ![Mediana_Interacoes_Feedback_Comentarios](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/9225ba62-b08b-412a-a2e8-68fc46d703a7) |
+| | |
+| --- | --- |
+| | |
+
+**<h4 align="center">Coeficiente de Spearman</h4>**
+
+<div align="center" style="display:flex;">
+    <div>
+        |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+        | :------ | :---- | :--------------------- | :---- |
+        | ρ | 0.25  | 0.17  | 0.024  |
+        | p-value | 0.0003 | 0.013 | 0.729 |
+    </div>
+    <div>
+        |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+        | :------ | :---- | :--------------------- | :---- |
+        | ρ | 0.25  | 0.14  | 0.04  |
+        | p-value | 0.0003 | 0.042 | 0.526 |
+    </div>
+</div>
+
+
+Os resultados dos gráficos e das correlações de Spearman sugerem que os PRs que requerem mudanças (CHANGES_REQUESTED) apresentam, em média, mais interações entre os participantes e, consequentemente, mais comentários para criar a comunicação entre esses envolvidos.
 
 - **RQ 05.** Qual a relação entre o tamanho dos PRs e o número de revisões realizadas?
 
@@ -94,18 +239,62 @@ Hipótese: Uma maior interação nos PRs, com discussões ativas e resolução r
 | -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![Correlacao_Tamanho_TotalRevisoes_ArquivosAlterados](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/8217a471-2f31-40a5-a8ea-8d286c3a04e0) | ![Correlacao_Tamanho_TotalRevisoes_LinhasAdicionadas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/5dcfaf4e-b550-45a5-a841-7171efcf918b) | ![Correlacao_Tamanho_TotalRevisoes_LinhasExcluidas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/ca7ac606-3ecf-444e-8d22-5011d106ebb7) |
 
+**<h4 align="center">Coeficiente de Spearman</h4>**
+
+<div align="center" style="display:flex;">
+    
+|         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+| :------ | :---- | :--------------------- | :---- |
+| ρ | 0.05  | 0.14  | 0.07  |
+| p-value | 0.102 | 1.66 × 10<sup>-5</sup> | 0.037 |
+
+</div>
+
 - **RQ 06.** Qual a relação entre o tempo de análise dos PRs e o número de revisões realizadas?
 
 ![Correlacao_CriacaoUltimaAtividade_TotalRevisoes](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/afae629d-6619-42f3-803a-a8e06a47b232)
 
+**<h4 align="center">Coeficiente de Spearman</h4>**
+
+<div align="center" style="display:flex;">
+    
+|         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+| :------ | :---- | :--------------------- | :---- |
+| ρ | 0.05  | 0.14  | 0.07  |
+| p-value | 0.102 | 1.66 × 10<sup>-5</sup> | 0.037 |
+
+</div>
+
 - **RQ 07.** Qual a relação entre a descrição dos PRs e o número de revisões realizadas?
 
 ![Correlacao_Descricao_Caracteres_TotalRevisoes](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/a9950234-918c-468a-b4e7-2be4961e84c5)
+
+**<h4 align="center">Coeficiente de Spearman</h4>**
+
+<div align="center" style="display:flex;">
+    
+|         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+| :------ | :---- | :--------------------- | :---- |
+| ρ | 0.05  | 0.14  | 0.07  |
+| p-value | 0.102 | 1.66 × 10<sup>-5</sup> | 0.037 |
+
+</div>
 
 - **RQ 08.** Qual a relação entre as interações nos PRs e o número de revisões realizadas?
 
 | | |
 | -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![Correlacao_Interacoes_TotalRevisoes_Participantes](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/7eb356d7-862e-488d-8a8c-ca3fc2e4c2e1) | ![Correlacao_Interacoes_TotalRevisoes_Comentarios](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/a4db9493-604a-4d45-a013-4a61e15683a7) |
+
+**<h4 align="center">Coeficiente de Spearman</h4>**
+
+<div align="center" style="display:flex;">
+    
+|         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+| :------ | :---- | :--------------------- | :---- |
+| ρ | 0.05  | 0.14  | 0.07  |
+| p-value | 0.102 | 1.66 × 10<sup>-5</sup> | 0.037 |
+
+</div>
 
 
