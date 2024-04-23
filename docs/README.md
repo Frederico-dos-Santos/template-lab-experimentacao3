@@ -132,33 +132,30 @@ Para a análise do coeficiente de correlação, será considerados estes valores
 
 | | | | 
 | --- | --- | --- |
-| | | |
+| ![Correlação entre Arquivos Alterados e Feedback final das Revisões](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/8b9f3265-18ad-4911-a072-b9d28003e85e) | ![Correlação entre Linhas Adicionadas e Feedback final das Revisões](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/af601c41-dc2b-411b-a8b3-d638221ac3dc) | ![Correlação entre Linhas Excluídas e Feedback final das Revisões](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/6b5633b9-861f-4dfd-8267-e97f8892a850) |
 
 | | | | 
 | --- | --- | --- |
-| | | |
+| ![Correlação entre Arquivos Alterados e Revisões com Mudanças Requisitadas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/ec1b3da2-ce6a-44e6-b6d2-84e4f721d2f3)  | ![Correlação entre Linhas Adicionadas e Revisões com Mudanças Requisitadas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/4af75ae0-9235-4152-a821-4fb601f3e9ce)  | ![Correlação entre Linhas Excluídas e Revisões com Mudanças Requisitadas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/724b074e-8e4e-4603-9cc1-ebb457243ad7) |
 
 **<h4 align="center">Coeficiente de Spearman</h4>**
 
 <div align="center" style="display:flex;">
-    <div>
-        |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
-        | :------ | :---- | :--------------------- | :---- |
-        | ρ | 0.33  | 0.12  | 0.23  |
-        | p-value | 1.61 × 10<sup>-6</sup> | 0.08 | 0.0012 |
-    </div>
-    <div>
-        |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
-        | :------ | :---- | :--------------------- | :---- |
-        | ρ | 0.20  | 0.13 | 0.18  |
-        | p-value | 0.0039 | 0.077 | 0.012 |
-    </div>
-    <div>
-        |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
-        | :------ | :---- | :--------------------- | :---- |
-        | ρ | 0.19  | 0.09  | 0.09  |
-        | p-value | 0.006 | 0.185 | 0.186 |
-    </div>
+ 
+   |         | APPROVED               | CHANGES_REQUESTED | REVIEW_REQUIRED |
+   | :------ | :--------------------- | :---------------- | :-------------- |
+   | ρ       | 0.33                   | 0.12              | 0.23            |
+   | p-value | 1.61 × 10<sup>-6</sup> | 0.08              | 0.0012          |
+ 
+   |         | APPROVED | CHANGES_REQUESTED | REVIEW_REQUIRED |
+   | :------ | :------- | :---------------- | :-------------- |
+   | ρ       | 0.20     | 0.13              | 0.18            |
+   | p-value | 0.0039   | 0.077             | 0.012           |
+
+   |         | APPROVED | CHANGES_REQUESTED | REVIEW_REQUIRED |
+   | :------ | :------- | :---------------- | :-------------- |
+   | ρ       | 0.19     | 0.09              | 0.09            |
+   | p-value | 0.006    | 0.185             | 0.186           |
 </div>
 
 A análise da relação entre o tamanho dos Pull Requests (PRs) e o feedback final das revisões revela uma tendência interessante: PRs menores têm maior probabilidade de aprovação ou necessidade de revisão. Isso se evidencia pela mediana menor e pelos quartis nos gráficos de Linhas Excluídas e Arquivos Alterados nos boxplots dos PRs aprovados. Além disso, a correlação positiva fraca entre o tamanho do PR e os diferentes tipos de feedback sugere que PRs maiores enfrentam revisões mais exigentes, sendo notável uma maior chance de aprovação para pull requests de refatoração que reduzem o número de linhas. A influência do tamanho do PR no resultado das revisões é clara, especialmente nos PRs aprovados, demonstrada pelos valores significativos de p-value na análise de Spearman. Entretanto, é crucial ressaltar que outros fatores também têm impacto, o que ressalta a complexidade do processo de revisão de código.
@@ -169,16 +166,16 @@ Além disso, em relação às linhas adicionadas, percebe-se uma tendência maio
 
 | | |
 | --- | --- |
-| | |
+| ![Correlação entre Intervalo Criação e Última Atividade e Feedback final das Revisões](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/b417be2b-c079-48da-b197-29c7a85c7b34) | ![Correlação entre Intervalo Criação e Última Atividade e Revisões Aprovadas e com Mudanças Requisitadas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/efd06def-fd77-488a-93db-e98579ae8146) |
 
 **<h4 align="center">Coeficiente de Spearman</h4>**
 
 <div align="center" style="display:flex;">
     
-    |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
-    | :------ | :---- | :--------------------- | :---- |
-    | ρ | -0.49  | -0.08  | -0.24  |
-    | p-value | 2.074 × 10<sup>-13</sup> | 0.28 | 0.0007 |
+   |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+   | :------ | :---- | :--------------------- | :---- |
+   | ρ | -0.49  | -0.08  | -0.24  |
+   | p-value | 2.074 × 10<sup>-13</sup> | 0.28 | 0.0007 |
 
 </div>
 
@@ -188,7 +185,7 @@ Os gráficos revelam que PRs que recebem solicitações de alterações (CHANGES
 
 | | |
 | --- | --- |
-| | |
+| ![Correlação entre Caracteres Corpo PR e Feedback final das Revisões](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/26224048-e079-4b95-936b-f458e076b894) | ![Correlação entre Caracteres Corpo PR e Revisões com Mudanças Requisitadas](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/46c892f1-0103-4858-9ac1-275f45a1a34e) |
 
 **<h4 align="center">Coeficiente de Spearman</h4>**
 
@@ -207,27 +204,22 @@ A análise revela que PRs com descrições mais extensas têm uma ligeira vantag
 
 | | |
 | --- | --- |
-| | |
-
-| | |
-| --- | --- |
-| | |
+| ![Correlação entre Participantes do PR e Feedback final das Revisões](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/6251c32c-768b-43fa-9ff6-1d9804a213bb) | ![Correlação entre Comentários do PR e Feedback final das Revisões](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/9102dfff-05c4-4f80-a161-fd4d32f37f47) |
 
 **<h4 align="center">Coeficiente de Spearman</h4>**
 
 <div align="center" style="display:flex;">
-    <div>
-        |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
-        | :------ | :---- | :--------------------- | :---- |
-        | ρ | 0.25  | 0.17  | 0.024  |
-        | p-value | 0.0003 | 0.013 | 0.729 |
-    </div>
-    <div>
-        |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
-        | :------ | :---- | :--------------------- | :---- |
-        | ρ | 0.25  | 0.14  | 0.04  |
-        | p-value | 0.0003 | 0.042 | 0.526 |
-    </div>
+     
+   |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+   | :------ | :---- | :--------------------- | :---- |
+   | ρ | 0.25  | 0.17  | 0.024  |
+   | p-value | 0.0003 | 0.013 | 0.729 |
+    
+   |         | APPROVED   | CHANGES_REQUESTED | REVIEW_REQUIRED |
+   | :------ | :---- | :--------------------- | :---- |
+   | ρ | 0.25  | 0.14  | 0.04  |
+   | p-value | 0.0003 | 0.042 | 0.526 |
+        
 </div>
 
 
