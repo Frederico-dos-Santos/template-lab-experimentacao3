@@ -246,7 +246,7 @@ Os resultados dos gráficos sugerem que não há uma relação entre o tamanho d
 
 - **RQ 06.** Qual a relação entre o tempo de análise dos PRs e o número de revisões realizadas?
 
-![Correlacao_CriacaoUltimaAtividade_TotalRevisoes](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/afae629d-6619-42f3-803a-a8e06a47b232)
+![Correlação entre Tempo de Análise e Total de Revisões](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/77488551/4c1bc681-40ff-4231-a01c-7a176886b281)
 
 **<h4 align="center">Coeficiente de Spearman</h4>**
 
