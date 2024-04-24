@@ -242,6 +242,8 @@ Os resultados dos gráficos e das correlações de Spearman sugerem que os PRs q
 
 </div>
 
+Os resultados dos gráficos sugerem que há uma relação fraca entre o tamanho do PR e o número de revisões realizadas. Nós gráficos de Linhas Adicionadas e Linhas excluídas aparenta possuir uma relação um pouco mais perceptível. As correlações de Spearman contribuem para essa conclusão. Isso implica que, embora exista uma conexão entre o tamanho dos PRs e o número de revisões, ela é pouco significativa, sugerindo que outros fatores possam desempenhar um papel mais substancial na determinação da quantidade de revisões em um PR.
+
 - **RQ 06.** Qual a relação entre o tempo de análise dos PRs e o número de revisões realizadas?
 
 ![Correlacao_CriacaoUltimaAtividade_TotalRevisoes](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/afae629d-6619-42f3-803a-a8e06a47b232)
@@ -257,6 +259,8 @@ Os resultados dos gráficos e das correlações de Spearman sugerem que os PRs q
 
 </div>
 
+A análise revela uma relação fraca entre o tempo de análise dos PRs (Pull Requests) e o número de revisões. A confirmação dessa conclusão é evidenciada pela correlação de Spearman, destacando que, embora exista uma associação entre esses dois fatores, ela é relativamente fraca, sugerindo que outros elementos possam influenciar de forma significativa o processo de revisão de código.
+
 - **RQ 07.** Qual a relação entre a descrição dos PRs e o número de revisões realizadas?
 
 ![Correlacao_Descricao_Caracteres_TotalRevisoes](https://github.com/Frederico-dos-Santos/template-lab-experimentacao3/assets/90854484/a9950234-918c-468a-b4e7-2be4961e84c5)
@@ -271,6 +275,8 @@ Os resultados dos gráficos e das correlações de Spearman sugerem que os PRs q
 | p-value | 0.102 | 1.66 × 10<sup>-5</sup> | 0.037 |
 
 </div>
+
+Os resultados dos gráficos indicam uma associação leve entre a presença de descrição nos Pull Requests (PRs) e o número de revisões realizadas. As correlações de Spearman reforçam essa conclusão, fornecendo suporte adicional para a relação fraca entre esses dois fatores. Isso sugere que, embora haja uma tendência para mais revisões em PRs com descrições, essa relação é bem fraca, indicando que outros aspectos podem ter uma influência maior na quantidade de revisões realizadas.
 
 - **RQ 08.** Qual a relação entre as interações nos PRs e o número de revisões realizadas?
 
@@ -288,5 +294,7 @@ Os resultados dos gráficos e das correlações de Spearman sugerem que os PRs q
 | p-value | 0.102 | 1.66 × 10<sup>-5</sup> | 0.037 |
 
 </div>
+
+A análise revela que há uma leve relação entre o número de interações nos PRs (Pull Requests) e o total de revisões. A confirmação dessa tendência é evidenciada pelo coeficiente de Spearman de 0,14, indicando uma correlação positiva fraca, mas estatisticamente significativa. Além disso, os dados sugerem que o tipo de revisão desempenha um papel na relação entre interações e revisões. PRs com mais interações tendem a ter maior probabilidade de receber alterações solicitadas ou exigir revisão adicional.
 
 
