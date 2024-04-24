@@ -297,4 +297,10 @@ Os resultados dos gráficos indicam uma associação leve entre a presença de d
 
 A análise revela que há uma leve relação entre o número de interações nos PRs (Pull Requests) e o total de revisões. A confirmação dessa tendência é evidenciada pelo coeficiente de Spearman de 0,14, indicando uma correlação positiva fraca, mas estatisticamente significativa. Além disso, os dados sugerem que o tipo de revisão desempenha um papel na relação entre interações e revisões. PRs com mais interações tendem a ter maior probabilidade de receber alterações solicitadas ou exigir revisão adicional.
 
+## Conclusão
 
+Após analisar como diferentes aspectos dos Pull Requests (PRs) se relacionam com o feedback final das revisões, fica claro que essas conexões envolvem diversos fatores. Por exemplo, notamos que PRs menores tendem a ser mais facilmente aprovados ou a precisar de menos revisões extras, o que sugere que ser sucinto e claro no código submetido pode ser uma vantagem. Por outro lado, descobrimos que PRs com descrições detalhadas têm uma pequena vantagem em receber um feedback final mais positivo, indicando que uma boa comunicação pode ajudar no processo de revisão.
+
+Além disso, ao analisarmos as interações nos PRs, encontramos uma relação fraca, mas estatisticamente significativa, entre o número de interações e o total de revisões. Isso sugere que uma comunicação mais intensiva pode estar ligada a uma revisão mais detalhada e, por consequência, a mais revisões. 
+
+Em resumo, essa análise destaca a importância de adotar uma abordagem flexível ao gerenciar o processo de revisão de código, levando em conta a importância de considerar múltiplos fatores ao avaliar a relação entre as características dos Pull Requests (PRs) e suas revisões. 
